@@ -27,6 +27,9 @@ class TeamsAccessibilityService : AccessibilityService() {
     private val meetingBannerCheckRunnable = Runnable { stepLookForMeetingStartedBanner() }
     private var teamListScrollAttempts = 0
     private val maxTeamListScrollAttempts = 25
+    private var nullRootRetryCount = 0
+    private val maxNullRootRetries = 15
+    private val nullRootRetryDelayMs = 2000L
 
     companion object {
         private const val TAG = "ProxyAIA11y"
@@ -67,7 +70,16 @@ class TeamsAccessibilityService : AccessibilityService() {
 
     private fun performTeamsFlow() {
         val teamName = pendingTeamName ?: return
-        val root = rootInActiveWindow ?: return
+        val root = rootInActiveWindow
+        if (root == null) {
+            if (nullRootRetryCount < maxNullRootRetries) {
+                nullRootRetryCount++
+                Log.d(TAG, "Root null, retry $nullRootRetryCount in ${nullRootRetryDelayMs}ms")
+                handler.postDelayed({ performTeamsFlow() }, nullRootRetryDelayMs)
+            }
+            return
+        }
+        nullRootRetryCount = 0
         try {
             if (isLookingForBanner) {
                 if (tapJoinNextToMeetingStartedBanner(root)) {
@@ -356,5 +368,6 @@ class TeamsAccessibilityService : AccessibilityService() {
         handler.removeCallbacks(meetingBannerCheckRunnable)
         prefs.edit().remove(PENDING_TEAM_KEY).apply()
         pendingTeamName = null
+        nullRootRetryCount = 0
     }
 }
