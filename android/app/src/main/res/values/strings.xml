@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ProxyAI</string>
+    <string name="accessibility_service_description">ProxyAI uses this to open the correct Team, go to General channel, find the meeting link, join the call, and turn off your microphone and camera so you can wake up in time.</string>
+</resources>
