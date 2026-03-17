@@ -50,6 +50,19 @@
             android:exported="false" />
 
         <receiver
+            android:name=".DismissAlarmReceiver"
+            android:exported="false" />
+
+        <service
+            android:name=".AlarmRingingService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="ProxyAI alarm ringing" />
+        </service>
+
+        <receiver
             android:name=".ScheduleCheckerReceiver"
             android:exported="false" />
 

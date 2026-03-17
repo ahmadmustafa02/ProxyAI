@@ -6,6 +6,17 @@ import '../models/scheduled_class.dart';
 
 const String _scheduleKey = 'proxyai_schedule';
 const String _pendingTeamKey = 'proxyai_pending_team';
+const String _onboardingDoneKey = 'proxyai_onboarding_done';
+
+Future<bool> isOnboardingDone() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getBool(_onboardingDoneKey) ?? false;
+}
+
+Future<void> setOnboardingDone() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setBool(_onboardingDoneKey, true);
+}
 
 Future<List<ScheduledClass>> loadSchedule() async {
   final prefs = await SharedPreferences.getInstance();

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../models/scheduled_class.dart';
+import '../theme/app_theme.dart';
 import '../services/storage_service.dart';
 
 class AddClassScreen extends StatefulWidget {
@@ -12,19 +14,20 @@ class AddClassScreen extends StatefulWidget {
   State<AddClassScreen> createState() => _AddClassScreenState();
 }
 
-class _AddClassScreenState extends State<AddClassScreen> {
+class _AddClassScreenState extends State<AddClassScreen> with SingleTickerProviderStateMixin {
   final _nameController = TextEditingController();
   final _teamController = TextEditingController();
   final Set<int> _days = {};
   TimeOfDay _time = const TimeOfDay(hour: 9, minute: 0);
+  late AnimationController _animController;
 
-  static const List<String> _dayNames = [
-    'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'
-  ];
+  static const List<String> _dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   @override
   void initState() {
     super.initState();
+    _animController = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
+    _animController.forward();
     if (widget.edit != null) {
       _nameController.text = widget.edit!.className;
       _teamController.text = widget.edit!.teamName;
@@ -35,6 +38,7 @@ class _AddClassScreenState extends State<AddClassScreen> {
 
   @override
   void dispose() {
+    _animController.dispose();
     _nameController.dispose();
     _teamController.dispose();
     super.dispose();
@@ -44,6 +48,19 @@ class _AddClassScreenState extends State<AddClassScreen> {
     final t = await showTimePicker(
       context: context,
       initialTime: _time,
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: AppColors.accent,
+              onPrimary: AppColors.background,
+              surface: AppColors.surface,
+              onSurface: AppColors.textPrimary,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (t != null) setState(() => _time = t);
   }
@@ -63,13 +80,21 @@ class _AddClassScreenState extends State<AddClassScreen> {
     final team = _teamController.text.trim();
     if (name.isEmpty || team.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Class name and Team name are required')),
+        SnackBar(
+          content: Text('Class name and Team name are required', style: GoogleFonts.inter(color: AppColors.textPrimary)),
+          backgroundColor: AppColors.surfaceElevated,
+          behavior: SnackBarBehavior.floating,
+        ),
       );
       return;
     }
     if (_days.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Select at least one day')),
+        SnackBar(
+          content: Text('Select at least one day', style: GoogleFonts.inter(color: AppColors.textPrimary)),
+          backgroundColor: AppColors.surfaceElevated,
+          behavior: SnackBarBehavior.floating,
+        ),
       );
       return;
     }
@@ -98,60 +123,163 @@ class _AddClassScreenState extends State<AddClassScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.edit != null ? 'Edit class' : 'Add class'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+    return Theme(
+      data: Theme.of(context).copyWith(
+        timePickerTheme: TimePickerThemeData(
+          dayPeriodColor: MaterialStateColor.resolveWith((_) => AppColors.accent),
+        ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Class name',
-                border: OutlineInputBorder(),
-              ),
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_rounded),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Text(
+            widget.edit != null ? 'Edit class' : 'Add class',
+            style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+          ),
+        ),
+        body: FadeTransition(
+          opacity: CurvedAnimation(parent: _animController, curve: Curves.easeOut),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Class name',
+                  style: GoogleFonts.spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textSecondary),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: _nameController,
+                  style: GoogleFonts.inter(color: AppColors.textPrimary),
+                  decoration: const InputDecoration(
+                    hintText: 'e.g. Calculus 101',
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'Team name (exact as in Teams)',
+                  style: GoogleFonts.spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textSecondary),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: _teamController,
+                  style: GoogleFonts.inter(color: AppColors.textPrimary),
+                  decoration: const InputDecoration(
+                    hintText: 'e.g. Math Department',
+                  ),
+                ),
+                const SizedBox(height: 28),
+                Text(
+                  'Days',
+                  style: GoogleFonts.spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textSecondary),
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: List.generate(7, (i) {
+                    final day = i + 1;
+                    final selected = _days.contains(day);
+                    return TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 0, end: 1),
+                      duration: Duration(milliseconds: 200 + (i * 40)),
+                      curve: Curves.easeOut,
+                      builder: (context, value, child) => Transform.scale(scale: value, child: child),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () => _toggleDay(day),
+                          borderRadius: BorderRadius.circular(20),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                            decoration: BoxDecoration(
+                              color: selected ? AppColors.accent : AppColors.surfaceElevated,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: selected ? AppColors.accent : AppColors.surfaceElevated,
+                                width: 1.5,
+                              ),
+                            ),
+                            child: Text(
+                              _dayNames[i],
+                              style: GoogleFonts.spaceGrotesk(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                color: selected ? AppColors.background : AppColors.textSecondary,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+                const SizedBox(height: 28),
+                Text(
+                  'Class time',
+                  style: GoogleFonts.spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textSecondary),
+                ),
+                const SizedBox(height: 12),
+                Material(
+                  color: AppColors.surfaceElevated,
+                  borderRadius: BorderRadius.circular(12),
+                  child: InkWell(
+                    onTap: _pickTime,
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: AppColors.accent.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(Icons.schedule_rounded, color: AppColors.accent, size: 24),
+                          ),
+                          const SizedBox(width: 16),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${_time.hourOfPeriod == 0 ? 12 : _time.hourOfPeriod}:${_time.minute.toString().padLeft(2, '0')} ${_time.period == DayPeriod.am ? 'AM' : 'PM'}',
+                                style: GoogleFonts.spaceGrotesk(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+                              ),
+                              Text('Tap to change', style: GoogleFonts.inter(fontSize: 12, color: AppColors.textMuted)),
+                            ],
+                          ),
+                          const Spacer(),
+                          Icon(Icons.chevron_right_rounded, color: AppColors.textMuted),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
+                FilledButton(
+                  onPressed: _save,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppColors.accent,
+                    foregroundColor: AppColors.background,
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  ),
+                  child: Text(
+                    widget.edit != null ? 'Save changes' : 'Add class',
+                    style: GoogleFonts.spaceGrotesk(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _teamController,
-              decoration: const InputDecoration(
-                labelText: 'Team name (exact as in Teams)',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Text('Day of week', style: TextStyle(fontWeight: FontWeight.w500)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: List.generate(7, (i) {
-                final day = i + 1;
-                return FilterChip(
-                  label: Text(_dayNames[i]),
-                  selected: _days.contains(day),
-                  onSelected: (_) => _toggleDay(day),
-                );
-              }),
-            ),
-            const SizedBox(height: 16),
-            ListTile(
-              title: const Text('Class time'),
-              subtitle: Text(
-                '${_time.hourOfPeriod == 0 ? 12 : _time.hourOfPeriod}:${_time.minute.toString().padLeft(2, '0')} ${_time.period == DayPeriod.am ? 'AM' : 'PM'}',
-              ),
-              trailing: const Icon(Icons.access_time),
-              onTap: _pickTime,
-            ),
-            const SizedBox(height: 24),
-            FilledButton(
-              onPressed: _save,
-              child: Text(widget.edit != null ? 'Save' : 'Add class'),
-            ),
-          ],
+          ),
         ),
       ),
     );
