@@ -171,8 +171,8 @@ ProxyAI is an independent student project and is not affiliated with Microsoft o
 
 ## Contact
 
-Built by Ahmad — CS Final Year Student, COMSATS University Islamabad
+Built by Ahmad
 
 ---
 
-*ProxyAI — because 8am classes should not require being awake at 8am.*
+*ProxyAI*
