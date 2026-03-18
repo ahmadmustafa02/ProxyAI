@@ -140,4 +140,4 @@ Built by Ahmad Mustafa
 
 ---
 
-*ProxyAI — because 8am classes should not require being awake at 8am.*
+*ProxyAI*
