@@ -192,7 +192,7 @@ ProxyAI is an independent project and is not affiliated with or endorsed by Micr
 ---
 
 <p align="center">
-  <strong>ProxyAI</strong> — Set once. Sleep in. Show up.
+  <strong>ProxyAI</strong> — Your AI Proxy for online classes
 </p>
 
 <p align="center">
