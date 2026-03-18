@@ -92,7 +92,7 @@ You take over. Already in the call.
 - If needed: **Settings → Apps → Special app access → Install unknown apps** and allow your browser or file manager.  
 - Open the APK and install.  
 
-*If Play Protect blocks it:* Play Store → Profile → Play Protect → Settings → turn off "Scan apps with Play Protect" for installation, then re-enable if you like afterward.
+*If Play Protect blocks it:* Play Store → Profile → Play Protect → Settings → turn off "Scan apps with Play Protect" and Improve Harmful App Detection for installation, then re-enable if you like afterward.
 
 ### 2. Allow restricted settings (Android 13+)
 
