@@ -1,4 +1,6 @@
 # ProxyAI
+<img width="820" height="817" alt="icon" src="https://github.com/user-attachments/assets/e7779cfa-dbd8-4669-abd1-9245c9444133" />
+
 
 <p align="center">
   <strong>Wake up already in class.</strong>
