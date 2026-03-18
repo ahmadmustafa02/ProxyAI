@@ -95,8 +95,7 @@ You take over. Already in the call.
 
 ### 1. Install the APK
 
-- Download the ProxyAI APK. 
-Link: https://drive.google.com/file/d/1P7RP6Bs_rZqnInmXjt3MmOUVaqo5AoMW/view?usp=sharing
+- Download the ProxyAI APK. (from release)
 - If needed: **Settings → Apps → Special app access → Install unknown apps** and allow your browser or file manager.  
 - Open the APK and install.  
 
