@@ -1,178 +1,201 @@
 # ProxyAI 🤖
+### *Your AI-powered class attendance assistant*
 
-**Automatically joins your Microsoft Teams classes while you sleep.**
+> **Built for students who refuse to let 8am classes ruin their sleep.**
 
-ProxyAI is an Android app built for university students who struggle to wake up for early morning online classes. Set your class schedule once — ProxyAI handles the rest. It wakes your phone, opens Microsoft Teams, finds the meeting, joins it, and mutes your mic automatically. Then it alarms you so you can take over.
-
----
-
-## How It Works
-
-1. **Add your classes** — Enter class name, the exact Microsoft Teams channel name, day of week, and class time
-2. **Go to sleep** — ProxyAI runs silently in the background 24/7
-3. **5 minutes before class** — ProxyAI starts checking your Teams General channel every 30 seconds for a meeting link
-4. **Automatic joining** — The moment a meeting is found, ProxyAI wakes your phone, opens Teams, navigates to the meeting, and joins with mic and camera off
-5. **Wake up alarm** — A loud alarm bypasses silent mode to wake you up after joining so you can take over
+ProxyAI automatically joins your Microsoft Teams classes at the exact class time — while you are completely asleep. No alarm. No scrambling. No missing attendance. Just set it up once and sleep through every lecture like a professional.
 
 ---
 
-## Features
+## ⚡ What It Does
 
-- ✅ Fully automatic — zero interaction needed at join time
-- ✅ Works while phone is asleep/screen off
-- ✅ Joins with mic and camera off by default
-- ✅ Checks for meeting link every 30 seconds before class
-- ✅ Loud alarm after joining to wake the student
-- ✅ Supports multiple classes and subjects
-- ✅ Per-class on/off toggle
-- ✅ Clean minimal black and white UI
-- ✅ No Microsoft account login required
-- ✅ No data sent to any server — everything runs locally on your device
+At class time, while you are dead asleep:
+
+```
+🔕 Phone is sleeping
+        ↓
+⏰ ProxyAI wakes up silently in background
+        ↓
+🔍 Checks your Teams General channel every 30 seconds for meeting link
+        ↓
+🔗 Meeting link found
+        ↓
+📱 Wakes your phone screen & dismisses lock screen
+        ↓
+🚀 Opens Microsoft Teams automatically
+        ↓
+🧭 Navigates → Your Team → General → Meeting Post → Join → Join Now
+        ↓
+🔇 Mutes mic & turns off camera
+        ↓
+✅ You are now in the meeting. Attendance marked.
+        ↓
+🔔 1 minute later — LOUD alarm fires to wake you up
+        ↓
+😴 You take over. Or go back to sleep. We don't judge.
+```
 
 ---
 
-## Requirements
+## 🎯 Features
 
-- Android 8.0 (Oreo) or higher
-- Microsoft Teams app installed and logged in on your phone
-- No lock screen password — swipe only or no lock screen (required for automatic screen unlock)
-- Accessibility Service permission enabled for ProxyAI
-- Battery optimization disabled for ProxyAI
+| Feature | Status |
+|---|---|
+| Fully automatic joining — zero user interaction | ✅ |
+| Works while phone is asleep and screen is off | ✅ |
+| Joins at exact class time | ✅ |
+| Checks General channel every 30 seconds | ✅ |
+| Mic off and camera off on join | ✅ |
+| Loud alarm 1 minute after joining | ✅ |
+| Alarm rings continuously until you tap "I'm Awake" | ✅ |
+| Supports unlimited classes and subjects | ✅ |
+| Per-class on/off toggle | ✅ |
+| No Microsoft login required | ✅ |
+| No servers — runs 100% on your device | ✅ |
+| Clean minimal black and white UI | ✅ |
 
 ---
 
-## Installation
+## 📲 Download
 
-### Step 1 — Disable Google Play Protect
+<br>
+
+> **[⬇️ Download ProxyAI APK]()**
+> *(link here)*
+
+<br>
+
+**Current Version:** v1.0.0
+**Minimum Android:** 8.0 (Oreo)
+**Size:** ~18MB
+
+---
+
+## 🛠️ Installation Guide
+
+Follow these steps carefully — takes about 3 minutes total.
+
+### 1️⃣ Disable Google Play Protect
+Play Protect blocks apps installed outside the Play Store.
+
 1. Open **Play Store**
-2. Tap your **profile picture** (top right)
-3. Tap **Play Protect → Settings (gear icon)**
+2. Tap your **profile picture** → **Play Protect**
+3. Tap the **gear icon** (Settings)
 4. Turn OFF **"Scan apps with Play Protect"**
 5. Turn OFF **"Improve harmful app detection"**
 
-> You can re-enable Play Protect after installing if you wish.
+### 2️⃣ Install the APK
+1. Download the ProxyAI APK from the link above
+2. Open the file and tap **Install**
+3. If blocked, go to **Settings → Apps → Special app access → Install unknown apps** and allow it
 
-### Step 2 — Install the APK
-1. Download the ProxyAI APK file
-2. Go to **Settings → Apps → Special app access → Install unknown apps**
-3. Allow installation from your browser or file manager
-4. Open the downloaded APK and tap Install
-
-### Step 3 — Allow Restricted Settings
-This step is required on Android 13 and above:
+### 3️⃣ Allow Restricted Settings *(Android 13+ only)*
 1. Go to **Settings → App Management → ProxyAI**
-2. Tap the **three dots** (top right corner)
+2. Tap the **three dots** in the top right
 3. Tap **"Allow Restricted Settings"**
 
-### Step 4 — Enable Accessibility Service
-1. Open ProxyAI app
+### 4️⃣ Enable Accessibility Service
+This is how ProxyAI navigates Teams automatically.
+
+1. Open **ProxyAI** app
 2. Tap **"Enable Now"** when prompted
-3. In Accessibility settings find **ProxyAI** and toggle it ON
+3. Find **ProxyAI** in Accessibility settings and toggle it **ON**
 
-### Step 5 — Remove Lock Screen Password
-ProxyAI needs to unlock your screen automatically while you sleep:
-1. Go to **Settings → Biometrics and Security → Screen Lock**
-2. Select **None** or **Swipe**
+### 5️⃣ Remove Lock Screen Password
+ProxyAI needs to unlock your screen automatically. Set lock screen to swipe only or none.
 
-### Step 6 — Disable Battery Optimization
-Prevents Android from killing ProxyAI in the background:
-1. Go to **Settings → Apps → ProxyAI → Battery**
-2. Select **Unrestricted**
+**Settings → Biometrics and Security → Screen Lock → Swipe / None**
 
----
+### 6️⃣ Disable Battery Optimization
+Prevents Android from killing ProxyAI while you sleep.
 
-## Adding Your Classes
-
-1. Open ProxyAI and tap the **+** button
-2. Fill in the following:
-   - **Class Name** — e.g. "Computer Networks"
-   - **Team Name** — the exact name as it appears in your Microsoft Teams app (e.g. "FA23-BCS Computer Networks")
-   - **Days** — select which days this class occurs
-   - **Time** — set the class start time
-3. Make sure the toggle is **ON** for each class
-4. That's it — ProxyAI will handle everything from here
-
-> **Important:** The Team Name must match exactly as it appears in your Teams app. Check spelling carefully.
+**Settings → Apps → ProxyAI → Battery → Unrestricted**
 
 ---
 
-## How the Automation Works
+## 📚 Adding Your Classes
 
-ProxyAI uses Android's **Accessibility Service API** — the same API used by screen readers and assistive tools. It does not use any bots, servers, or third-party services. Everything happens directly on your device inside the Teams app:
+1. Open ProxyAI and tap **+**
+2. Fill in:
+   - **Class Name** — anything you want e.g. "Computer Networks"
+   - **Team Name** — must match **exactly** as it appears in your Teams app
+   - **Days** — which days this class occurs
+   - **Time** — exact class start time
+3. Toggle it **ON**
+4. Done — never think about it again
 
-```
-Background Service monitors schedule
-→ 5 mins before class: starts checking General channel every 30 seconds
-→ Meeting link found: wakes phone screen
-→ Dismisses swipe lock screen
-→ Opens Microsoft Teams app
-→ Navigates to your Team → General channel
-→ Finds meeting post → Taps Join → Taps Join Now
-→ Turns off mic and camera
-→ Fires loud alarm to wake you up
-```
+> ⚠️ **Team Name must be exact.** Open your Teams app, find your subject, and copy the name character by character. Even one wrong letter and it won't find the meeting.
 
 ---
 
-## Privacy
+## 🔒 Privacy
 
-- No Microsoft login required
-- No user data collected or transmitted
-- No backend server — everything runs on your device
-- All class schedules stored locally only
-- ProxyAI never reads your messages — it only navigates the Teams UI
+ProxyAI is built with privacy first:
 
----
-
-## Troubleshooting
-
-**App not joining at class time:**
-- Make sure the toggle is ON for the class
-- Check Team Name matches exactly
-- Verify Accessibility Service is still enabled
-- Make sure battery optimization is disabled
-
-**"Restricted Setting" error when enabling Accessibility Service:**
-- Go to Settings → App Management → ProxyAI → three dots → Allow Restricted Settings
-
-**Teams opens but doesn't navigate:**
-- Make sure screen lock is set to None or Swipe (no password/pattern)
-- Make sure Microsoft Teams app is installed and you are logged in
-
-**Alarm not loud enough:**
-- Make sure media and alarm volume is turned up on your phone
+- **No Microsoft login** — your credentials stay with you
+- **No servers** — everything runs locally on your phone
+- **No data collection** — we collect nothing
+- **No internet required** after setup — except for Teams itself
+- **No message reading** — ProxyAI only navigates the Teams UI, it never reads your chats
 
 ---
 
-## Known Limitations
+## ❓ Troubleshooting
 
-- Requires no lock screen password for fully automatic operation
-- If Microsoft Teams updates their UI, navigation may break until ProxyAI is updated
-- iOS not supported — Android only
-- Does not work if Teams app is not installed or logged out
+**Nothing happens at class time**
+- Toggle is ON for the class ✓
+- Team Name matches exactly ✓
+- Accessibility Service still enabled ✓
+- Battery optimization disabled ✓
+- ProxyAI app was opened at least once after install ✓
 
----
+**"Restricted Setting" error**
+- Settings → App Management → ProxyAI → three dots → Allow Restricted Settings
 
-## Tech Stack
+**Teams opens but gets stuck**
+- Make sure lock screen is set to Swipe or None (no pattern/PIN)
+- Make sure Teams app is installed and you are logged in
 
-- **Flutter** — cross platform mobile framework
-- **Kotlin** — Android native code for Accessibility Service
-- **Android Accessibility Service API** — UI automation inside Teams
-- **Flutter Background Service** — 24/7 background schedule monitoring
-- **Full Screen Intent** — wakes phone and shows over lock screen
-
----
-
-## Disclaimer
-
-ProxyAI is an independent student project and is not affiliated with Microsoft or Microsoft Teams in any way. Use responsibly and in accordance with your university's attendance policy.
+**Alarm is too quiet**
+- Turn up your phone's alarm volume in Settings → Sounds
 
 ---
 
-## Contact
+## ⚙️ How It Works Under The Hood
 
-Built by Ahmad
+ProxyAI uses Android's official **Accessibility Service API** — the same API used by Google's own TalkBack screen reader. It does not root your phone, does not use any unofficial APIs, and does not touch anything outside of what you authorize.
+
+**Tech Stack:**
+- Flutter — app framework
+- Kotlin — native Android Accessibility Service
+- Flutter Background Service — 24/7 schedule monitoring
+- Full Screen Intent — wakes phone over lock screen
+- AudioManager STREAM_ALARM — bypasses silent mode for alarm
 
 ---
 
-*ProxyAI*
+## ⚠️ Disclaimer
+
+ProxyAI is an independent student project. Not affiliated with Microsoft or Microsoft Teams. Use responsibly and in line with your university's attendance policies. If Teams updates their UI, the navigation may need an update — we'll push fixes as fast as possible.
+
+---
+
+## 👨‍💻 Built By
+
+**Ahmad** — CS Final Year Student, COMSATS University Islamabad
+
+---
+
+## ⭐ Support
+
+If ProxyAI saved your attendance — drop a ⭐ on GitHub. It means a lot.
+
+Found a bug? Open an issue or reach out directly.
+
+---
+
+<div align="center">
+
+*ProxyAI — because attendance should not require consciousness.*
+
+</div>
