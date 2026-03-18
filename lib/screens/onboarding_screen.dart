@@ -17,7 +17,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _page = 0;
-  static const int _totalPages = 4;
+  static const int _totalPages = 6;
 
   Future<void> _finish() async {
     await setOnboardingDone();
@@ -77,8 +77,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onPageChanged: (i) => setState(() => _page = i),
                 children: [
                   _WelcomePage(onNext: _next),
+                  _RestrictedSettingsPage(onNext: _next),
                   _AccessibilityPage(onNext: _next),
                   _BatteryPage(onNext: _next),
+                  _NotificationsPage(onNext: _next),
                   _LockScreenPage(onNext: _finish),
                 ],
               ),
@@ -124,6 +126,104 @@ class _WelcomePage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
             ),
             child: Text('Get started', style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600, fontSize: 16)),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RestrictedSettingsPage extends StatelessWidget {
+  final VoidCallback onNext;
+
+  const _RestrictedSettingsPage({required this.onNext});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 32),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(height: 24),
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: AppColors.accent.withOpacity(0.12),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(Icons.settings_applications_rounded, size: 64, color: AppColors.accent),
+          ),
+          const SizedBox(height: 28),
+          Text(
+            'Allow Restricted Settings',
+            style: GoogleFonts.spaceGrotesk(fontSize: 22, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Do this first so ProxyAI can run properly:',
+            style: GoogleFonts.inter(fontSize: 15, color: AppColors.textSecondary, height: 1.5),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          _StepItem(number: 1, text: 'Open Settings'),
+          _StepItem(number: 2, text: 'Search for "App management"'),
+          _StepItem(number: 3, text: 'Search for "ProxyAI"'),
+          _StepItem(number: 4, text: 'Tap the three dots (⋮) on the top right'),
+          _StepItem(number: 5, text: 'Tap "Allow restricted settings"'),
+          const SizedBox(height: 32),
+          FilledButton(
+            onPressed: onNext,
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.accent,
+              foregroundColor: AppColors.background,
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
+            ),
+            child: Text('Next', style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600, fontSize: 16)),
+          ),
+          const SizedBox(height: 32),
+        ],
+      ),
+    );
+  }
+}
+
+class _StepItem extends StatelessWidget {
+  final int number;
+  final String text;
+
+  const _StepItem({required this.number, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 28,
+            height: 28,
+            decoration: BoxDecoration(
+              color: AppColors.accent.withOpacity(0.2),
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              '$number',
+              style: GoogleFonts.spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.accent),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                text,
+                style: GoogleFonts.inter(fontSize: 15, color: AppColors.textPrimary, height: 1.4),
+              ),
+            ),
           ),
         ],
       ),
@@ -263,6 +363,61 @@ class _BatteryPage extends StatelessWidget {
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NotificationsPage extends StatelessWidget {
+  final VoidCallback onNext;
+
+  const _NotificationsPage({required this.onNext});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 32),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(height: 24),
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: AppColors.accent.withOpacity(0.12),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(Icons.notifications_rounded, size: 64, color: AppColors.accent),
+          ),
+          const SizedBox(height: 28),
+          Text(
+            'Allow Notifications',
+            style: GoogleFonts.spaceGrotesk(fontSize: 22, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'So ProxyAI can alert you when it\'s time for class:',
+            style: GoogleFonts.inter(fontSize: 15, color: AppColors.textSecondary, height: 1.5),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          _StepItem(number: 1, text: 'Go to Settings → App management'),
+          _StepItem(number: 2, text: 'Search for "ProxyAI"'),
+          _StepItem(number: 3, text: 'Tap "Manage notifications"'),
+          _StepItem(number: 4, text: 'Turn on / Allow notifications'),
+          const SizedBox(height: 32),
+          FilledButton(
+            onPressed: onNext,
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.accent,
+              foregroundColor: AppColors.background,
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
+            ),
+            child: Text('Next', style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600, fontSize: 16)),
+          ),
+          const SizedBox(height: 32),
         ],
       ),
     );

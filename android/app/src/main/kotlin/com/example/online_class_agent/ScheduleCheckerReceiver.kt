@@ -55,8 +55,7 @@ class ScheduleCheckerReceiver : BroadcastReceiver() {
                 val hour = obj.optInt("hour", 0)
                 val minute = obj.optInt("minute", 0)
                 val classMinutes = hour * 60 + minute
-                val fiveMinBefore = classMinutes - 5
-                if (currentMinutes < fiveMinBefore || currentMinutes >= fiveMinBefore + 1) continue
+                if (currentMinutes < classMinutes || currentMinutes >= classMinutes + 1) continue
 
                 val id = obj.optString("id", "")
                 val dateKey = "proxyai_trigger_$id"
@@ -75,6 +74,7 @@ class ScheduleCheckerReceiver : BroadcastReceiver() {
                     set(Calendar.SECOND, 0)
                     set(Calendar.MILLISECOND, 0)
                 }.timeInMillis
+                alarmTime += 60 * 1000
                 if (alarmTime <= System.currentTimeMillis()) {
                     alarmTime += 24 * 60 * 60 * 1000
                 }

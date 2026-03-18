@@ -8,11 +8,15 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Icon
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
 import android.media.AudioManager
-import android.media.Ringtone
+import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
@@ -25,7 +29,9 @@ class AlarmRingingService : Service() {
         private const val PENDING_TEAM_KEY = "flutter.proxyai_pending_team"
     }
 
-    private var ringtone: Ringtone? = null
+    private var mediaPlayer: MediaPlayer? = null
+    private var audioFocusRequest: Any? = null
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -82,6 +88,13 @@ class AlarmRingingService : Service() {
             startForeground(NOTIFICATION_ID, notification)
         }
 
+        startAlarmSound()
+        startRepeatingVibration()
+
+        return START_STICKY
+    }
+
+    private fun startAlarmSound() {
         val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
         audioManager.setStreamVolume(
@@ -89,34 +102,96 @@ class AlarmRingingService : Service() {
             audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM),
             0
         )
-        val alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-            ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-        ringtone = RingtoneManager.getRingtone(this, alarmUri)?.apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                setStreamType(AudioManager.STREAM_ALARM)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val attrs = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build()
+            val focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                .setAudioAttributes(attrs)
+                .setAcceptsDelayedFocusGain(false)
+                .setWillPauseWhenDucked(false)
+                .build()
+            val result = audioManager.requestAudioFocus(focusRequest)
+            audioFocusRequest = focusRequest
+            if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                audioManager.setStreamVolume(
+                    AudioManager.STREAM_ALARM,
+                    audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM),
+                    AudioManager.FLAG_VIBRATE
+                )
             }
-            play()
+        } else {
+            @Suppress("DEPRECATION")
+            audioManager.requestAudioFocus(
+                null,
+                AudioManager.STREAM_ALARM,
+                AudioManager.AUDIOFOCUS_GAIN
+            )
         }
 
+        val alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+            ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+        try {
+            mediaPlayer = MediaPlayer().apply {
+                setDataSource(this@AlarmRingingService, alarmUri)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    setAudioAttributes(
+                        AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_ALARM)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                            .build()
+                    )
+                } else {
+                    @Suppress("DEPRECATION")
+                    setAudioStreamType(AudioManager.STREAM_ALARM)
+                }
+                isLooping = true
+                setVolume(1f, 1f)
+                setOnPreparedListener { start() }
+                prepareAsync()
+            }
+        } catch (e: Exception) {
+            mediaPlayer?.release()
+            mediaPlayer = null
+        }
+    }
+
+    private fun startRepeatingVibration() {
         val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             (getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
         } else {
             @Suppress("DEPRECATION")
             getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(5000, VibrationEffect.DEFAULT_AMPLITUDE))
-        } else {
-            @Suppress("DEPRECATION")
-            vibrator.vibrate(5000)
+        val vibrateRunnable = object : Runnable {
+            override fun run() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator.vibrate(VibrationEffect.createOneShot(2000, VibrationEffect.DEFAULT_AMPLITUDE))
+                } else {
+                    @Suppress("DEPRECATION")
+                    vibrator.vibrate(2000)
+                }
+                handler.postDelayed(this, 3000)
+            }
         }
-
-        return START_STICKY
+        handler.post(vibrateRunnable)
     }
 
     override fun onDestroy() {
-        ringtone?.stop()
-        ringtone = null
+        handler.removeCallbacksAndMessages(null)
+        mediaPlayer?.apply {
+            try {
+                stop()
+                release()
+            } catch (_: Exception) { }
+        }
+        mediaPlayer = null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && audioFocusRequest != null) {
+            (getSystemService(Context.AUDIO_SERVICE) as AudioManager).abandonAudioFocusRequest(audioFocusRequest as AudioFocusRequest)
+            audioFocusRequest = null
+        }
         stopForeground(STOP_FOREGROUND_REMOVE)
         super.onDestroy()
     }
