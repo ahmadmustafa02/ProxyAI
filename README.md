@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-  <strong>Wake up already in class.</strong>
+  <strong>Never miss a class again — even in your sleep</strong>
 </p>
 
 <p align="center">
