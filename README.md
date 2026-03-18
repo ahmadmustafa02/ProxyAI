@@ -1,4 +1,4 @@
-# ProxyAI 🤖
+# ProxyAI 
 ### *Your AI-powered class attendance assistant*
 
 > **Built for students who refuse to let 8am classes ruin their sleep.**
@@ -182,7 +182,7 @@ ProxyAI is an independent student project. Not affiliated with Microsoft or Micr
 
 ## 👨‍💻 Built By
 
-**Ahmad** — CS Final Year Student, COMSATS University Islamabad
+**Ahmad** — Linkedin https://www.linkedin.com/in/ahmadmustafa01/
 
 ---
 
