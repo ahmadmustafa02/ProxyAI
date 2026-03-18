@@ -25,7 +25,6 @@ ProxyAI is an Android app built for university students who struggle to wake up 
 - ✅ Loud alarm after joining to wake the student
 - ✅ Supports multiple classes and subjects
 - ✅ Per-class on/off toggle
-- ✅ Clean black and white minimal UI
 - ✅ No Microsoft account login required
 - ✅ No data sent to any server — everything runs locally on your device
 
@@ -137,7 +136,7 @@ ProxyAI is an independent student project and is not affiliated with Microsoft o
 
 ## Contact
 
-Built by Ahmad — CS Final Year Student, COMSATS University Islamabad
+Built by Ahmad Mustafa 
 
 ---
 
