@@ -1,4 +1,8 @@
-# ProxyAI
+# ProxyAI - AI proxy for online classes
+
+<p align="center">
+ProxyAI ensures you’re always present — joining your Microsoft Teams meetings automatically and waking you up at the perfect time to take over.
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/e7779cfa-dbd8-4669-abd1-9245c9444133" width="180"/>
 </p>
